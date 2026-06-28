@@ -22,4 +22,5 @@ router.post("/register", registerValidation, validateRequest, registerUser);
 router.post("/login", loginValidation, validateRequest, loginUser);
 
 router.get("/me", protect, getCurrentUser);
+
 export default router;
