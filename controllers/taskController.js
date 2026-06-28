@@ -1,33 +1,20 @@
 import Task from "../models/Task.js";
+import asyncHandler from "../utils/asyncHandler.js";
 
-/**
- * @desc Create a new task
- * @route POST /api/tasks
- * @access Public
- */
+export const createTask = asyncHandler(async (req, res) => {
+  const { title, description, priority, status, dueDate } = req.body;
 
-export const createTask = async (req, res) => {
-  try {
-    const { title, description, status, priority, dueDate } = req.body;
+  const task = await Task.create({
+    title,
+    description,
+    priority,
+    status,
+    dueDate,
+  });
 
-    const task = await Task.create({
-      title,
-      description,
-      status,
-      priority,
-      dueDate,
-    });
-
-    res.status(201).json({
-      success: true,
-      message: "Task created successfully.",
-      data: task,
-    });
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: "Failed to create task.",
-      error: error.message,
-    });
-  }
-};
+  res.status(201).json({
+    success: true,
+    message: "Task created successfully.",
+    data: task,
+  });
+});
