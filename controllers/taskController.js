@@ -113,3 +113,24 @@ export const deleteTask = asyncHandler(async (req, res) => {
     message: "Task deleted successfully.",
   });
 });
+
+export const getDashboardStats = asyncHandler(async (req, res) => {
+  const userId = req.user._id;
+
+  const [total, completed, pending, inProgress] = await Promise.all([
+    Task.countDocuments({ user: userId }),
+    Task.countDocuments({ user: userId, status: "Completed" }),
+    Task.countDocuments({ user: userId, status: "Pending" }),
+    Task.countDocuments({ user: userId, status: "In Progress" }),
+  ]);
+
+  res.status(200).json({
+    success: true,
+    data: {
+      total,
+      completed,
+      pending,
+      inProgress,
+    },
+  });
+});
